@@ -1,0 +1,16 @@
+{
+  "user_game": [
+    { "id": 2, "username": "zikri", "email": "zikri@email.com" },
+    { "id": 3, "username": "nugroho", "email": "nugroho@email.com" },
+    { "id": 5, "username": "zkr", "email": "fathh@email.com" }
+  ],
+  "user_game_biodata": [
+    {
+      "id": 1,
+      "userId": 1,
+      "first_name": "fathoni",
+      "last_name": "zikri",
+      "birthdate": "30-10-2002"
+    }
+  ]
+}
