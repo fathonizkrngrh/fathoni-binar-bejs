@@ -43,6 +43,12 @@ module.exports = (sequelize, DataTypes) => {
         return Promise.reject(err);
       }
     };
+
+    // static register = ({ username, password }) => {
+    //   const encryptedPassword = this.#encrypt(password);
+
+    //   return this.create({ username, password: encryptedPassword });
+    // };
   }
 
   User.init(

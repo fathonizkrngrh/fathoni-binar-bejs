@@ -1,25 +1,43 @@
 const passport = require("passport");
-const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
+const LocalStrategy = require("passport-local").Strategy;
 const { User } = require("../models");
+const bcrypt = require("bcrypt");
 
-var options = {};
-options.jwtFromRequest = ExtractJwt.fromHeader("authorization");
-options.secretOrKey = process.env.JWT_SECRET_KEY;
+async function authenticate(email, password, done) {
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      // balikan error
+      return done(null, false, { message: "user not found!" });
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      // balikan error
+      return done(null, false, { message: "invalid password" });
+    }
+
+    return done(null, user);
+  } catch (err) {
+    return done(null, false, { message: err.message });
+  }
+}
 
 passport.use(
-  new JwtStrategy(options, async (payload, done) => {
-    try {
-      const user = await User.findOne({ where: { id: payload.id } });
-
-      if (user) {
-        return done(null, user);
-      }
-
-      return done(null, null);
-    } catch (err) {
-      return done(err, null);
-    }
-  })
+  new LocalStrategy(
+    { usernameField: "email", paswordField: "password" },
+    authenticate
+  )
 );
+
+// serialize -> menyimpan sesi
+passport.serializeUser((user, done) => {
+  return done(null, user.id);
+});
+
+// serialize -> membaca sesi
+passport.deserializeUser(async (id, done) => {
+  return done(null, await User.findOne({ where: { id } }));
+});
 
 module.exports = passport;

@@ -1,3 +1,9 @@
 const passport = require("../utils/passport");
 
-module.exports = passport.authenticate("jwt", { session: false });
+module.exports = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  return res.redirect("/auth/login");
+};
