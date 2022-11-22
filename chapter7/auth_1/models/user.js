@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         id: this.id,
         name: this.name,
         email: this.email,
+        role: this.role,
       };
 
       return jwt.sign(payload, process.env.JWT_SECRET_KEY);
